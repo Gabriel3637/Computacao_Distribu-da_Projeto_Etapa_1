@@ -1,1 +1,0 @@
-Compile main.tex com Tectonic ou no Overleaf. O estilo SBC é o original do SBGames: https://www.sbgames.org/arquivos/Template_SBC/template-latex/. A logo foi obtida da URL fornecida: https://www.pucminas.br/SiteAssets/IconPUCMG.ico. Relatório revisado tecnicamente. O grupo deve conferir a autoria e as contribuições individuais antes da submissão.
