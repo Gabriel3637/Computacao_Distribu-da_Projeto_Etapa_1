@@ -96,33 +96,3 @@ do notebook, usa `eval()`/`inference_mode()`, normaliza por banda e compara o
 hash dos pesos e da normalização. Os testes opcionais usam pesos artificiais;
 isso não constitui avaliação científica com os pesos treinados.
 
-## Tiles, máscaras e métricas
-
-Entrada NPZ: `image` float32 `[C,H,W]` e `truth` opcional `[H,W]` com 0,1,255.
-O padrão é tile 128, overlap 32; ambos podem ser alterados no cliente. A costura
-calcula a média das probabilidades e aplica o limiar 0,5 depois. Cada pixel da
-máscara final entra uma vez em TP/FP/FN e nos cálculos de IoU e Dice.
-Denominador zero produz `null`; rótulos 255 e pixels inválidos são ignorados.
-Arquivos NetCDF diferentes não são costurados sem coordenadas/CRS compatíveis.
-
-Informe `--pixel-area-m2` apenas quando souber a área constante do pixel em m².
-Sem esse dado, o sistema informa pixels, sem inventar áreas geográficas.
-Os RPCs unários limitam cada mensagem a 64 MiB, arrays a 48 MiB e jobs a 10.000 tiles.
-
-## Contrato e evidências
-
-RPCs desta etapa: `Heartbeat`, `Election`, `Coordinator`, `InferTile`, `SubmitJob`
-e `GetJob`. Não há `ReplicateJob` no contrato desta versão.
-
-```powershell
-.\.venv\Scripts\python.exe -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. adgeo/proto/cluster.proto
-```
-
-`output/tests/pytest.xml` contém os resultados da suíte. `output/tests/demo/summary.json`
-registra eleição e máscaras; `demo/peers/node-N.log` contém os logs reais.
-Sem instalar PyTorch/xarray, os testes opcionais aparecem como ignorados.
-Os testes registrados foram executados em processos distintos na mesma máquina.
-
-O artigo foi revisado tecnicamente. As responsabilidades seguem a divisão de frentes informada pelo grupo, com
-teoria e implementação compartilhadas por dupla. O grupo deve revisar a redação
-e assegurar sua autoria, conforme o enunciado.
