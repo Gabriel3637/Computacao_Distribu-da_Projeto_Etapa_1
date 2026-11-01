@@ -1,0 +1,61 @@
+syntax = "proto3";
+package adgeo;
+
+service Peer {
+  rpc Heartbeat(Empty) returns (Status);
+  rpc Election(ElectionMessage) returns (Ack);
+  rpc Coordinator(CoordinatorMessage) returns (Ack);
+  rpc InferTile(Tile) returns (TileResult);
+  rpc SubmitJob(JobRequest) returns (JobRecord);
+  rpc GetJob(JobKey) returns (JobRecord);
+}
+message Empty {}
+message Ack { bool ok = 1; }
+// Ordem lexicográfica (counter, initiator). Não é um relógio físico.
+message Round { uint64 counter = 1; uint64 initiator = 2; }
+message Status {
+  uint64 node_id = 1;
+  uint64 leader_id = 2; // zero: eleição em andamento
+  Round round = 3;
+  string model_id = 4;
+  uint64 tiles_computed = 5;
+  uint64 cache_hits = 6;
+}
+message ElectionMessage { Round round = 1; uint64 candidate_id = 2; }
+message CoordinatorMessage { Round round = 1; uint64 leader_id = 2; }
+message Tile {
+  string job_id = 1;
+  string tile_id = 2;
+  uint32 x = 3;
+  uint32 y = 4;
+  uint32 valid_width = 5;
+  uint32 valid_height = 6;
+  bytes image_npy = 7; // float32 [C,H,W], sem pickle
+  bytes valid_npy = 8; // bool [H,W]; exclui padding e pixels inválidos
+  string model_id = 9; // hash dos pesos e da normalização; ou demo-v1
+  Round round = 10;
+  uint64 leader_id = 11;
+}
+message TileResult {
+  string tile_id = 1;
+  bytes probability_npy = 2; // float32 [H,W], classe geleira
+  string model_id = 3;
+  uint64 worker_id = 4;
+}
+message JobRequest {
+  string job_id = 1;
+  bytes image_npy = 2; // cena única [C,H,W], float32
+  bytes truth_npy = 3; // opcional: [H,W] com 0,1,255
+  uint32 tile_size = 4;
+  uint32 overlap = 5;
+  string model_id = 6;
+  double pixel_area_m2 = 7; // zero: desconhecida, não calcula km²
+}
+message JobKey { string job_id = 1; }
+message JobRecord {
+  JobRequest request = 1;
+  string state = 2; // queued, done, failed
+  bytes mask_npy = 3;
+  string metrics_json = 4;
+  string error = 5;
+}

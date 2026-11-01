@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "adgeo-distribuido"
+version = "0.1.0"
+description = "Segmentação distribuída por tiles com gRPC e eleição em anel"
+requires-python = ">=3.11"
+dependencies = ["grpcio==1.85.1", "protobuf==7.36.2", "numpy>=1.26,<3", "Pillow>=10"]
+
+[project.optional-dependencies]
+dev = ["grpcio-tools==1.85.1", "pytest>=8,<10"]
+unet = ["torch>=2.6,<3", "xarray>=2024.1", "netCDF4>=1.6"]
+
+[project.scripts]
+adgeo = "adgeo.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["adgeo*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

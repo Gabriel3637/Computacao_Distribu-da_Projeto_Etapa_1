@@ -1,0 +1,21 @@
+{
+  "peers": [
+    {
+      "id": 1,
+      "address": "127.0.0.1:56938"
+    },
+    {
+      "id": 2,
+      "address": "127.0.0.1:56939"
+    },
+    {
+      "id": 3,
+      "address": "127.0.0.1:56940"
+    }
+  ],
+  "heartbeat_interval": 0.15,
+  "heartbeat_timeout": 0.25,
+  "failure_timeout": 0.9,
+  "election_timeout": 2.5,
+  "tile_timeout": 8
+}

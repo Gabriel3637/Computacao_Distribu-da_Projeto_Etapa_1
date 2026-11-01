@@ -1,0 +1,1 @@
+{"valid_pixels": 369780, "predicted_pixels": 188831, "tp": 188831, "fp": 0, "fn": 0, "tn": 180949, "true_pixels": 188831, "iou": 1.0, "dice": 1.0, "precision": 1.0, "recall": 1.0, "accuracy": 1.0, "tiles": 42, "workers": {"1": 14, "2": 14, "3": 14}, "model_id": "demo-v1", "coordinator": 3, "elapsed_seconds": 0.875, "demo_backend": true}
